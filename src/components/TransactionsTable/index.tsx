@@ -1,26 +1,10 @@
-import { useEffect, useState } from "react";
-import { api } from "../../services/api";
+import { useContext } from "react";
+import { TransactionsContext } from "../../context/TransactionsContext";
 
 import { Container } from "./styles";
 
-interface ITransactions {
-  id: number,
-  title: string,
-  type: string,
-  category: string,
-  amount: number,
-  createdAt: string,
-}
-
 export function TransactionsTable() {
-  const [transactions, setTransactions] = useState<ITransactions[]>([]);
-
-  useEffect(() => {
-    api.get('transactions')
-      .then(response => {
-        setTransactions(response.data.transactions)
-      });
-  }, []);
+  const { transactions } = useContext(TransactionsContext);
 
   return (
     <Container>
@@ -38,7 +22,7 @@ export function TransactionsTable() {
           {transactions.map((transaction) => (
             <tr key={transaction.id}>
               <td>{ transaction.title }</td>
-              <td className={transaction.title}>
+              <td className={transaction.type}>
                 R$ {new Intl.NumberFormat('pt-BR', {
                   style: 'currency',
                   currency: 'BRL',
